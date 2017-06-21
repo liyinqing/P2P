@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SVF</string>
+    <string name="main_name">Current version number:%1$s</string>
+</resources>

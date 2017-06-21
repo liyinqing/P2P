@@ -15,8 +15,20 @@ public class UIUtils {
     }
 
 
-
     private static Context getContext() {
         return MyApplication.getContext();
     }
+
+    public static String stringFromat(int id,String value){
+        String version = String.format(getString(id),value);
+        return version;
+    }
+
+    private static String getString(int id) {
+
+        String string = getContext().getResources().getString(id);
+        return string;
+    }
+
+    ;
 }

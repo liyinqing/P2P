@@ -19,5 +19,8 @@ public class MyApplication extends Application {
         super.onCreate();
         context = this;
 
+        //初始化CrashHanlder, 上线的时候在使用，现在都是测试没必要
+       // CrashHandler.getInstence().init(this);
+
     }
 }

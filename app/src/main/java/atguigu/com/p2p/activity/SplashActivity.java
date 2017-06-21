@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import atguigu.com.p2p.R;
+import atguigu.com.p2p.utils.UIUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -86,8 +87,22 @@ public class SplashActivity extends AppCompatActivity {
         return true;
     }
 
+
     private void initView() {
-        splashTvVersion.setText(getVersion());
+       // 在布局中写中文1
+//        String s = splashTvVersion.getText().toString();
+//        String format = String.format(s, getVersion());
+//        splashTvVersion.setText(format);
+
+
+        //在strings中标注2
+//        String string = getResources().getString(R.string.main_name);
+//        String format = String.format(string, getVersion());
+//        splashTvVersion.setText(format);
+
+        //封装进UIUtils3
+        String s = UIUtils.stringFromat(R.string.main_name, getVersion());
+        splashTvVersion.setText(s);
     }
 
 
