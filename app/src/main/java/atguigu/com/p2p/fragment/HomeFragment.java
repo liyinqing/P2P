@@ -1,6 +1,10 @@
 package atguigu.com.p2p.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,7 +25,9 @@ import atguigu.com.p2p.base.BaseFragment;
 import atguigu.com.p2p.bean.IndexBean;
 import atguigu.com.p2p.common.AppNetConfig;
 import atguigu.com.p2p.utils.HttpUtils;
+import atguigu.com.p2p.view.ProgressView;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 作者：李银庆 on 2017/6/20 16:51
@@ -40,14 +46,14 @@ public class HomeFragment extends BaseFragment {
     TextView tvHomeProduct;
     @Bind(R.id.tv_home_yearrate)
     TextView tvHomeYearrate;
+    @Bind(R.id.progressView)
+    ProgressView progressView;
 
 
     @Override
     protected void initTitle() {
-
+        baseTitle.setText("首页");
     }
-
-
 
 
     public void initData() {
@@ -81,7 +87,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onSuccess(String content) {
                 //解析数据
-               parseJson(content);
+                parseJson(content);
             }
 
             @Override
@@ -96,17 +102,23 @@ public class HomeFragment extends BaseFragment {
     private void parseJson(String json) {
 
         //手动解析
-       // manualParseJson(json);
+        // manualParseJson(json);
         //框架解析
         IndexBean indexBean = JSON.parseObject(json, IndexBean.class);
         initBanner(indexBean);
+
+        initProgress(indexBean);
+    }
+
+    private void initProgress(IndexBean indexBean) {
+        progressView.setSweepAngle(Integer.parseInt(indexBean.getProInfo().getProgress()));
     }
 
     private void initBanner(IndexBean indexBean) {
 
         List<IndexBean.ImageArrBean> imageArr = indexBean.getImageArr();
         List<String> images = new ArrayList<>();
-        for(int i = 0; i < imageArr.size(); i++) {
+        for (int i = 0; i < imageArr.size(); i++) {
             String imaurl = imageArr.get(i).getIMAURL();
             images.add(AppNetConfig.BASE_URL + imaurl);
         }
@@ -130,7 +142,7 @@ public class HomeFragment extends BaseFragment {
             JSONObject jsonObject = new JSONObject(json);
 
             JSONArray imageArr = jsonObject.getJSONArray("imageArr");
-            for(int i = 0; i < imageArr.length(); i++) {
+            for (int i = 0; i < imageArr.length(); i++) {
 
                 IndexBean.ImageArrBean imageArrayBean = new IndexBean.ImageArrBean();
                 JSONObject jsonObject1 = imageArr.getJSONObject(i);
@@ -156,8 +168,22 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        ButterKnife.bind(this, rootView);
+        return rootView;
+    }
 
-    class  GlideImageLoader extends ImageLoader{
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+
+    class GlideImageLoader extends ImageLoader {
 
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
